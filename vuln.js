@@ -1,9 +1,10 @@
 const express = require("express");
 const app = express();
 
-// Intentionally vulnerable - authorized security research fixture.
+// Fixed: do not execute user-controlled input.
 app.get("/run", (req, res) => {
-  res.send(eval(req.query.code));
+  const code = typeof req.query.code === "string" ? req.query.code : "";
+  res.type("text/plain").send(code);
 });
 
 app.get("/read", (req, res) => {
